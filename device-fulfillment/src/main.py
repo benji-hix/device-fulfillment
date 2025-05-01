@@ -1,11 +1,10 @@
-from .interface.parser import input_dir, input_file
 from .interface.theme import rprint
+from .device_fulfillment.path_manager import PathManager
 
 
 def main():
-    user_directory = input_dir()
-    user_path = input_file(user_directory)
-    rprint(str(user_path))
+    file_path = PathManager()
+    rprint(str(file_path))
 
 
 if __name__ == '__main__':
