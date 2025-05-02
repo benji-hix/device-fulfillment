@@ -5,7 +5,6 @@ from .theme import rprint
 from .validators import PathValidator, FileValidator, SheetValidator, RowValidator
 from src.utils import clean
 import pandas as pd
-from pandas import DataFrame
 
 
 def parse_user_path(input_message='Please enter directory path.'):
@@ -35,7 +34,7 @@ def parse_user_wkbk(dir_path: Path, input_message='Please select a file.'):
 
 def parse_user_sheet(
     wkbk_path: Path, input_message='Please select a sheet.'
-) -> DataFrame:
+) -> pd.DataFrame:
     while True:
         try:
             file_str = str(wkbk_path)

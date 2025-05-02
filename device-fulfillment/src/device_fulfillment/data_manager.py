@@ -9,7 +9,7 @@ class DataManager:
     def __init__(self, wkbk_path: Path):
         self.wkbk_path = wkbk_path
         self.wkbk_stem = wkbk_path.stem
-        self.dataframe : DataFrame = None
+        self.dataframe: DataFrame = None
         self.row = None
         self._load_sheet()
 

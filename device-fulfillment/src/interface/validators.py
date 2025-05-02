@@ -4,30 +4,6 @@ from pathlib import Path
 from src.utils import clean
 
 
-class DirectoryValidator(Validator):
-    def validate(self, document):
-        clean_str = clean(document.text)
-        dir_path = Path(clean_str).expanduser().resolve()
-
-        if not dir_path.exists():
-            raise ValidationError(
-                message='Provided directory does not exist.',
-                cursor_position=len(document.text),
-            )
-
-        if not dir_path.is_dir():
-            raise ValidationError(
-                message=('Provided path is not a directory'),
-                cursor_position=len(document.text),
-            )
-
-        if not any(file.suffix == '.xlsx' for file in dir_path.iterdir()):
-            raise ValidationError(
-                message='Provided directory does not contain any .xlsx files',
-                cursor_position=len(document.text),
-            )
-
-
 class FileValidator(Validator):
     def __init__(self, dir_path: Path):
         self.dir_path = dir_path.expanduser().resolve()

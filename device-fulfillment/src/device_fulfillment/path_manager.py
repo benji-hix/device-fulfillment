@@ -11,7 +11,7 @@ class PathManager:
 
     def __str__(self):
         return self.path_str
-    
+
     @property
     def path(self):
         return self.path_obj.expanduser().resolve()
@@ -41,4 +41,3 @@ class PathManager:
         if input_file.suffix != '.xlsx':
             input_file = input_file.with_suffix('.xlsx')
         return input_file
-
