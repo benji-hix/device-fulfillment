@@ -71,3 +71,36 @@ class PathValidator(Validator):
                 message='Path must be a directory or .xlsx file',
                 cursor_position=len(document.text),
             )
+
+
+class SheetValidator(Validator):
+    def __init__(self, sheet_names: list[str]):
+        self.sheet_names = sheet_names
+
+    def validate(self, document):
+        clean_str = clean(document.text)
+
+        if clean_str not in self.sheet_names:
+            raise ValidationError(
+                message='Worksheet not found.', cursor_position=len(document.text)
+            )
+
+
+class RowValidator(Validator):
+    def __init__(self, total_rows: int):
+        self.total_rows = total_rows
+
+    def validate(self, document):
+        if not document.text.isdigit():
+            raise ValidationError(
+                message='Input must be a viable row number.',
+                cursor_position=len(document.text),
+            )
+
+        row = int(document.text)
+
+        if row not in range(2, self.total_rows + 1):
+            raise ValidationError(
+                message='Row does not exist in worksheet.',
+                cursor_position=len(document.text),
+            )
