@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from src.interface.theme import rprint
-from src.interface.parsers import prompt_for_sheet, prompt_for_row
+from .parsers import prompt_for_sheet, prompt_for_row
 from pathlib import Path
 from pandas import DataFrame, Series
 

@@ -1,6 +1,6 @@
 # path_manager.py
 from src.interface.theme import rprint
-from interface.parsers import prompt_for_path, prompt_for_workbook
+from .parsers import prompt_for_path, prompt_for_workbook
 from pathlib import Path
 
 
