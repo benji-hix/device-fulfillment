@@ -41,7 +41,8 @@ dependencies = [
   "openpyxl",
   "pywin32",
   "rich",
-  "prompt_toolkit"
+  "prompt_toolkit",
+  "jinja2"
 ]
 
 [tool.hatch.envs.types]

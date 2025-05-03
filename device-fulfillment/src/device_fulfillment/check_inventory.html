@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: "Aptos", sans-serif;
+            font-size: 14px;
+            line-height: 20px;
+            color: #000000;
+        }
+
+        table, td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+        table {
+            width: 400px;
+        }
+        td {
+            padding: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <p>Hello {{ addressee }},</p>
+
+        <p>I'm reaching out to confirm your device inventory for the upcoming cohort:</p>
+
+        <table class="cohort_info">
+            <tr>
+                <td>Course Block ID</td>
+                <td>{{ course_id }}</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>{{ date }}</td>
+            </tr>
+            <tr>
+                <td>Instructor</td>
+                <td>{{ instructor }}</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>{{ location }}</td>
+            </tr>
+            <tr>
+                <td>Enrollment</td>
+                <td>{{ enrollment }}</td>
+            </tr>
+            <tr>
+                <td>Device Type</td>
+                <td>{{ device_type }}</td>
+            </tr>
+        </table>
+
+        <p>Please let me know if you will require additional devices to be sent to this location.</p>
+
+        <p style="margin-bottom: 0px;">Kind regards,</p>
+        <p style="margin-top: 2px;">
+            <span style="font-family: Aptos Display; font-size: 14px;">Benji Hix</span>
+            <span style="font-family: Aptos Display; font-size: 14px; color: #808080;">&nbsp;&nbsp;|&nbsp;&nbsp;Program Specialist<br></span>
+            <span style="font-family: Aptos Display; font-size: 14px; color: #582b81;">SEIU 775 Benefits Group<br></span>
+            <span style="font-family: Aptos Display; font-size: 14px; color: #808080;">(206) 334-3901<br></span>
+        </p>
+
+    </div>
+</body>
+
+</html>

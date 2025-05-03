@@ -3,15 +3,16 @@ from prompt_toolkit.validation import ValidationError, Validator
 from pathlib import Path
 from src.utils import clean
 
+XLSX_EXT = '.xlsx'
 
-class FileValidator(Validator):
+class WorkbookValidator(Validator):
     def __init__(self, dir_path: Path):
         self.dir_path = dir_path.expanduser().resolve()
 
     def validate(self, document):
         clean_str = clean(document.text)
-        if not clean_str.endswith('.xlsx'):
-            clean_str = document.text + '.xlsx'
+        if not clean_str.endswith(XLSX_EXT):
+            clean_str = document.text + XLSX_EXT
 
         file_path = self.dir_path / clean_str
         if not file_path.exists():
@@ -29,22 +30,22 @@ class PathValidator(Validator):
             raise ValidationError(message='Provided file or folder does not exist.')
 
         elif user_path.is_dir():
-            if not any(file.suffix == '.xlsx' for file in user_path.iterdir()):
+            if not any(file.suffix == XLSX_EXT for file in user_path.iterdir()):
                 raise ValidationError(
-                    message='Provided directory does not contain any .xlsx files',
+                    message=f'Provided directory does not contain any {XLSX_EXT} files',
                     cursor_position=len(document.text),
                 )
 
         elif user_path.is_file():
-            if user_path.suffix != '.xlsx':
+            if user_path.suffix != XLSX_EXT:
                 raise ValidationError(
-                    message='File is not an .xlsx file',
+                    message=f'File is not an {XLSX_EXT} file',
                     cursor_position=len(document.text),
                 )
 
         else:
             raise ValidationError(
-                message='Path must be a directory or .xlsx file',
+                message=f'Path must be a directory or {XLSX_EXT} file',
                 cursor_position=len(document.text),
             )
 

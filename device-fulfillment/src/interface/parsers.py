@@ -2,70 +2,89 @@
 from prompt_toolkit import prompt
 from pathlib import Path
 from .theme import rprint
-from .validators import PathValidator, FileValidator, SheetValidator, RowValidator
+from .validators import PathValidator, WorkbookValidator, SheetValidator, RowValidator
 from src.utils import clean
 import pandas as pd
 
 
-def parse_user_path(input_message='Please enter directory path.'):
+def prompt_for_path(input_message='Please enter folder or file path.'):
     while True:
         try:
             rprint(input_message)
-            user_dir = prompt(validator=PathValidator(), validate_while_typing=True)
-            user_dir = clean(user_dir)
-            return Path(user_dir).expanduser().resolve()
+            selected_dir = prompt(validator=PathValidator(), validate_while_typing=True)
+            selected_dir = clean(selected_dir)
+            return Path(selected_dir).expanduser().resolve()
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
 
 
-def parse_user_wkbk(dir_path: Path, input_message='Please select a file.'):
+def prompt_for_workbook(dir_path: Path, input_message='Please select a file.'):
+    def print_avail_workbooks(found_files: list) -> None:
+        rprint('\nExcel files found:')
+        for ind, f in enumerate(found_files):
+            rprint(f'{ind + 1}.  {f.name}')
+        return None
+
     while True:
         try:
-            rprint(input_message)
-            wkbk_str = prompt(
-                validator=FileValidator(dir_path), validate_while_typing=True
+            dir_files = [
+                f
+                for f in dir_path.iterdir()
+                if f.is_file() and f.suffix == '.xlsx' and not f.name.startswith('~$')
+            ]
+            print_avail_workbooks(dir_files)
+            rprint(f'\n{input_message}')
+            selected_workbook = prompt(
+                validator=WorkbookValidator(dir_path), validate_while_typing=True
             )
-            wkbk_str = clean(wkbk_str)
-            wkbk_path = dir_path / wkbk_str
-            return wkbk_path.expanduser().resolve()
+            selected_workbook = clean(selected_workbook)
+            # Feature: ability to select workbook based on index?
+            workbook_path = dir_path / selected_workbook
+            return workbook_path.expanduser().resolve()
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
 
 
-def parse_user_sheet(
+def prompt_for_sheet(
     wkbk_path: Path, input_message='Please select a sheet.'
 ) -> pd.DataFrame:
+    def print_avail_sheets(found_sheets: list):
+        rprint('\nWorksheets found:')
+        for ind, s in enumerate(found_sheets):
+            rprint(f'{ind + 1}.  {s}')
+        return None
+
     while True:
         try:
-            file_str = str(wkbk_path)
-            sheets = pd.ExcelFile(file_str).sheet_names
-            rprint(f'{sheets =}')
+            wkbk_str = str(wkbk_path)
+            sheets = pd.ExcelFile(wkbk_str).sheet_names
+            # rprint(f' Available worksheets: {sheets}.')
 
             if len(sheets) <= 1:
-                return pd.read_excel(file_str, sheets[0])
+                return pd.read_excel(wkbk_str, sheets[0]), sheets[0]
 
-            rprint(input_message)
-            for sheet in sheets:
-                rprint(f'  {sheet}')
-            user_sheet = prompt(
+            print_avail_sheets(sheets)
+            rprint(f'\n{input_message}')
+            selected_sheet = prompt(
                 validator=SheetValidator(sheets), validate_while_typing=True
             )
-            user_sheet = clean(user_sheet)
-            return pd.read_excel(file_str, user_sheet)
+            selected_sheet: str = clean(selected_sheet)
+            # Feature: ability to select sheet via index?
+            return pd.read_excel(wkbk_str, selected_sheet), selected_sheet
         except Exception as error:
-            rprint(f'Unpexcted error: {error}.', style='error')
+            rprint(f'Unexpected error: {error}.', style='error')
 
 
-def parse_user_row(dataframe: pd.DataFrame, input_message='Please select a row.'):
+def prompt_for_row(dataframe: pd.DataFrame, input_message='Please select a row.'):
     while True:
         try:
             total_rows = len(dataframe) + 1
-            rprint(f'Number of rows: {total_rows}')
-            rprint(input_message)
-            row_str = prompt(
+            rprint(f'Total rows: {total_rows}')
+            rprint(f'\n{input_message}')
+            selected_row_str = prompt(
                 validator=RowValidator(total_rows), validate_while_typing=True
             )
-            row_number = int(row_str) - 2
-            return dataframe.iloc[row_number]
+            selected_row = int(selected_row_str) - 2
+            return dataframe.iloc[selected_row]
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
