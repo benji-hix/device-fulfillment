@@ -20,10 +20,9 @@ class DataManager:
         instance = cls()
         instance.workbook_path = input_path
         instance.workbook_stem = input_path.stem
-        instance._select_sheet()
         return instance
 
-    def _select_sheet(self):
+    def select_sheet(self):
         rprint(f'Loading {self.workbook_stem}...')
         self.selected_sheet, self.sheet_name = prompt_for_sheet(self.workbook_path)
         return self
