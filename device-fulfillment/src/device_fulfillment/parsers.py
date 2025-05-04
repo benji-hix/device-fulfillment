@@ -1,17 +1,22 @@
 # parsers.py
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 from pathlib import Path
 from src.interface.theme import rprint
 from .validators import PathValidator, WorkbookValidator, SheetValidator, RowValidator
 from src.utils import clean
 import pandas as pd
 
+session = PromptSession()
+
+def set_session(new_session: PromptSession):
+    global session
+    session = new_session
 
 def prompt_for_path(input_message='Please enter folder or file path.'):
     while True:
         try:
             rprint(input_message)
-            selected_dir = prompt(validator=PathValidator(), validate_while_typing=True)
+            selected_dir = session.prompt(validator=PathValidator(), validate_while_typing=True)
             selected_dir = clean(selected_dir)
             return Path(selected_dir).expanduser().resolve()
         except Exception as error:
@@ -34,7 +39,7 @@ def prompt_for_workbook(dir_path: Path, input_message='Please select a file.'):
             ]
             print_avail_workbooks(dir_files)
             rprint(f'\n{input_message}')
-            selected_workbook = prompt(
+            selected_workbook = session.prompt(
                 validator=WorkbookValidator(dir_path), validate_while_typing=True
             )
             selected_workbook = clean(selected_workbook)
@@ -65,7 +70,7 @@ def prompt_for_sheet(
 
             print_avail_sheets(sheets)
             rprint(f'\n{input_message}')
-            selected_sheet = prompt(
+            selected_sheet = session.prompt(
                 validator=SheetValidator(sheets), validate_while_typing=True
             )
             selected_sheet: str = clean(selected_sheet)
@@ -81,10 +86,17 @@ def prompt_for_row(dataframe: pd.DataFrame, input_message='Please select a row.'
             total_rows = len(dataframe) + 1
             rprint(f'Total rows: {total_rows}')
             rprint(f'\n{input_message}')
-            selected_row_str = prompt(
+            selected_row_str = session.prompt(
                 validator=RowValidator(total_rows), validate_while_typing=True
             )
             selected_row = int(selected_row_str) - 2
             return dataframe.iloc[selected_row]
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
+
+def prompt_for_confirm():
+    while True:
+        try:
+            continue
+        except Exception as error:
+            rprint(f'Unexpected error: {error}', style='error')

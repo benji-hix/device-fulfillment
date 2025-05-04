@@ -13,6 +13,7 @@ class DataManager:
         self.selected_sheet: DataFrame = None
         self.sheet_name: str = None
         self.selected_row: Series = None
+        self.cohort: Cohort = None
 
     @classmethod
     def from_path(cls, input_path):
@@ -36,15 +37,8 @@ class DataManager:
         self.selected_row = prompt_for_row(self.selected_sheet)
         return self
 
-    def confirm_cohort(self):
-        rprint('Press enter to generate email with the following data:')
-        rprint(self.selected_row['Cohort ID'])
-        rprint('Confirm?')
-        input()
-        return self
-
-    def to_cohort(self):
-        return Cohort(
+    def set_cohort(self):
+        self.cohort = Cohort(
             start_date=self.selected_row['Start Date'],
             course_id=self.selected_row['Cohort ID'],
             network=self.selected_row['Network'],
@@ -53,6 +47,22 @@ class DataManager:
             type=self.selected_row['Type'],
             instructor=self.selected_row['Instructor'],
         )
+        return self
+
+    def confirm_cohort(self):
+        rprint(
+            '\nPlease confirm the Outlook app is open. Generate email for the following cohort?'
+        )
+        cohort = self.cohort
+        raw_date = self.cohort.start_date
+        formatted_date = f'{raw_date.month}-{raw_date.day}-{raw_date.year}'
+        cohort_preview = (
+            f'{cohort.type} {cohort.network} {cohort.location} {formatted_date}'
+        )
+        rprint(cohort_preview)
+        rprint('\nPress enter to confirm.')
+        input()
+        return self
 
 
 @dataclass
