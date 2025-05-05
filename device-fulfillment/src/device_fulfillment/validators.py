@@ -3,7 +3,7 @@ from prompt_toolkit.validation import ValidationError, Validator
 from pathlib import Path
 from src.utils import clean
 
-XLSX_EXT = '.xlsx'
+XLSX_EXT = '.xlsx' 
 
 class WorkbookValidator(Validator):
     def __init__(self, dir_path: Path):
@@ -11,6 +11,7 @@ class WorkbookValidator(Validator):
 
     def validate(self, document):
         clean_str = clean(document.text)
+        
         if not clean_str.endswith(XLSX_EXT):
             clean_str = document.text + XLSX_EXT
 

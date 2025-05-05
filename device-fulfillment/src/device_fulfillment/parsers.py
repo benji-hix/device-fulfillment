@@ -2,23 +2,33 @@
 from prompt_toolkit import PromptSession
 from pathlib import Path
 from src.interface.theme import rprint
-from .validators import PathValidator, WorkbookValidator, SheetValidator, RowValidator
+from .validators import (
+    PathValidator,
+    WorkbookValidator,
+    SheetValidator,
+    RowValidator
+)
 from src.utils import clean
 import pandas as pd
 
 session = PromptSession()
 
+
 def set_session(new_session: PromptSession):
     global session
     session = new_session
+
 
 def prompt_for_path(input_message='Please enter folder or file path.'):
     while True:
         try:
             rprint(input_message)
-            selected_dir = session.prompt(validator=PathValidator(), validate_while_typing=True)
+            selected_dir = session.prompt(
+                validator=PathValidator(), validate_while_typing=True
+            )
             selected_dir = clean(selected_dir)
             return Path(selected_dir).expanduser().resolve()
+
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
 
@@ -46,6 +56,7 @@ def prompt_for_workbook(dir_path: Path, input_message='Please select a file.'):
             # Feature: ability to select workbook based on index?
             workbook_path = dir_path / selected_workbook
             return workbook_path.expanduser().resolve()
+
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
 
@@ -93,6 +104,7 @@ def prompt_for_row(dataframe: pd.DataFrame, input_message='Please select a row.'
             return dataframe.iloc[selected_row]
         except Exception as error:
             rprint(f'Unexpected error: {error}.', style='error')
+
 
 def prompt_for_confirm():
     while True:

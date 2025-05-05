@@ -16,7 +16,7 @@ class DataManager:
         self.cohort: Cohort = None
 
     @classmethod
-    def from_path(cls, input_path):
+    def from_path(cls, input_path : Path):
         instance = cls()
         instance.workbook_path = input_path
         instance.workbook_stem = input_path.stem
@@ -39,7 +39,7 @@ class DataManager:
     def set_cohort(self):
         self.cohort = Cohort(
             start_date=self.selected_row['Start Date'],
-            course_id=self.selected_row['Cohort ID'],
+            course_id=self.selected_row['Course ID'],
             network=self.selected_row['Network'],
             location=self.selected_row['Location'],
             enrollment=self.selected_row['Enrollment'],

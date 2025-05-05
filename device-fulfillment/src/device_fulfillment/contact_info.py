@@ -4,8 +4,8 @@ NETWORK_CONTACTS = {
         'CC' : 'genevie.borja@myseiubenefits.org'
     },
     'CWCE' : {
-        'To' : 'melinda.little@CCs.spokane.edu',
-        'CC' : 'stephen.pugh@CCs.spokane.edu'
+        'To' : 'melinda.little@ccs.spokane.edu',
+        'CC' : 'stephen.pugh@ccs.spokane.edu'
     },
     'CCS' : {
         'To' : 'ltctraining@CCsww.org',
